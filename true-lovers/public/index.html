@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>True Lovers</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="ambient" id="ambient" aria-hidden="true"></div>
+
+<!-- ===================== HOME ===================== -->
+<section class="screen" id="screen-home" data-screen>
+  <div class="brandmark">
+    <span class="brand-heart">❤️</span>
+    <h1>True Lovers</h1>
+    <p class="tagline">This is how loyalty looks.</p>
+  </div>
+
+  <div class="home-actions">
+    <button class="btn btn-primary" data-goto="create">
+      <span class="btn-icon">❤️</span> Create Connection
+    </button>
+    <button class="btn btn-secondary" data-goto="join">
+      <span class="btn-icon">🔑</span> Join Connection
+    </button>
+  </div>
+
+  <div class="reenter">
+    <button class="link-btn" id="btn-reenter">Already connected? Re-enter your chat</button>
+  </div>
+
+  <p class="footnote">No accounts. No login. Just a code and a secret, shared only with someone you trust.</p>
+</section>
+
+<!-- ===================== CREATE ===================== -->
+<section class="screen" id="screen-create" data-screen hidden>
+  <button class="back-btn" data-goto="home">← Back</button>
+  <h2 class="screen-title">Create Connection</h2>
+
+  <div class="step" data-step="1">
+    <label class="field-label">This connection is for</label>
+    <div class="pill-group" id="create-type">
+      <button class="pill active" data-type="relationship">❤️ Relationship</button>
+      <button class="pill" data-type="friends">🤝 Friends</button>
+    </div>
+
+    <label class="field-label" for="first-message">Your first message</label>
+    <textarea id="first-message" class="text-input" placeholder="Hi ❤️" maxlength="4000"></textarea>
+
+    <label class="field-label">Secure it with a</label>
+    <div class="pill-group" id="create-secret-type">
+      <button class="pill active" data-secret="pin">🔢 Secret PIN</button>
+      <button class="pill" data-secret="word">🔤 Secret Word</button>
+    </div>
+    <input id="create-secret" class="text-input" type="text" placeholder="e.g. 4582" maxlength="64" />
+
+    <p class="error-msg" id="create-error"></p>
+
+    <button class="btn btn-primary" id="btn-create-submit">Generate Connection Code</button>
+  </div>
+
+  <div class="step" data-step="2" hidden>
+    <p class="field-label">Share both of these only with the person you trust</p>
+    <div class="code-card" id="reveal-code-card">
+      <div class="code-card-notch"></div>
+      <span class="code-card-label">Connection Code</span>
+      <span class="code-card-value" id="reveal-code">TL-000000</span>
+      <span class="code-card-label">Secret</span>
+      <span class="code-card-value code-card-secret" id="reveal-secret">••••</span>
+    </div>
+    <button class="btn btn-secondary" id="btn-copy-details">Copy code + secret</button>
+    <button class="btn btn-primary" id="btn-enter-chat">Enter the chat →</button>
+  </div>
+</section>
+
+<!-- ===================== JOIN ===================== -->
+<section class="screen" id="screen-join" data-screen hidden>
+  <button class="back-btn" data-goto="home">← Back</button>
+  <h2 class="screen-title">Join Connection</h2>
+
+  <label class="field-label" for="join-code">Connection Code</label>
+  <input id="join-code" class="text-input mono" type="text" placeholder="TL-8K4P92" maxlength="16" autocomplete="off" />
+
+  <label class="field-label" for="join-secret">Secret PIN / Secret Word</label>
+  <input id="join-secret" class="text-input" type="text" placeholder="Enter what was shared with you" maxlength="64" />
+
+  <p class="error-msg" id="join-error"></p>
+
+  <button class="btn btn-primary" id="btn-join-submit">Let's start the chat ❤️</button>
+</section>
+
+<!-- ===================== CHAT ===================== -->
+<section class="screen screen-chat" id="screen-chat" data-screen hidden>
+  <header class="chat-header">
+    <button class="icon-btn" id="btn-chat-back" title="Leave chat">←</button>
+    <div class="chat-header-info">
+      <span class="chat-header-title" id="chat-title">❤️ True Lovers</span>
+      <span class="chat-header-sub" id="chat-subtitle">Relationship · Day 0</span>
+    </div>
+    <button class="icon-btn" id="btn-open-settings" title="Customize">✨</button>
+    <button class="icon-btn" id="btn-open-search" title="Search messages">🔍</button>
+    <button class="icon-btn" id="btn-open-notes" title="Shared notes">📝</button>
+  </header>
+
+  <div class="pinned-bar" id="pinned-bar" hidden>
+    <span>📌</span><span id="pinned-text"></span>
+  </div>
+
+  <div class="search-bar" id="search-bar" hidden>
+    <input type="text" id="search-input" placeholder="Search this conversation…" />
+    <button class="icon-btn" id="btn-close-search">✕</button>
+  </div>
+
+  <div class="messages" id="messages" data-wallpaper="hearts"></div>
+
+  <div class="typing-indicator" id="typing-indicator" hidden>typing…</div>
+
+  <div class="reply-bar" id="reply-bar" hidden>
+    <div class="reply-bar-text"><span>Replying to</span><p id="reply-preview"></p></div>
+    <button class="icon-btn" id="btn-cancel-reply">✕</button>
+  </div>
+
+  <footer class="composer">
+    <button class="icon-btn" id="btn-emoji">😊</button>
+    <input type="text" id="composer-input" class="composer-input" placeholder="Type a message…" maxlength="4000" />
+    <button class="icon-btn send-btn" id="btn-send">➤</button>
+  </footer>
+
+  <div class="emoji-tray" id="emoji-tray" hidden></div>
+</section>
+
+<!-- ===================== SETTINGS DRAWER ===================== -->
+<aside class="drawer" id="drawer-settings" hidden>
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h3>Customize</h3>
+      <button class="icon-btn" id="btn-close-settings">✕</button>
+    </div>
+
+    <section class="drawer-section">
+      <h4>Theme</h4>
+      <div class="swatch-row" id="theme-row"></div>
+    </section>
+
+    <section class="drawer-section">
+      <h4>Wallpaper</h4>
+      <div class="swatch-row" id="wallpaper-row"></div>
+    </section>
+
+    <section class="drawer-section">
+      <h4>Anniversary date</h4>
+      <input type="date" id="anniversary-input" class="text-input" />
+    </section>
+
+    <section class="drawer-section">
+      <h4>Loyalty</h4>
+      <div class="loyalty-stats" id="loyalty-stats"></div>
+    </section>
+
+    <section class="drawer-section" id="exclusive-section">
+      <h4>Exclusive Mode</h4>
+      <p class="drawer-hint">Locks this as your one, mutually-confirmed connection. (Scoped to this connection only — see the README for why.)</p>
+      <button class="btn btn-secondary" id="btn-request-exclusive">Request Exclusive Lock</button>
+      <p class="exclusive-status" id="exclusive-status"></p>
+    </section>
+  </div>
+</aside>
+
+<!-- ===================== NOTES DRAWER ===================== -->
+<aside class="drawer" id="drawer-notes" hidden>
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h3>Shared Notes</h3>
+      <button class="icon-btn" id="btn-close-notes">✕</button>
+    </div>
+    <textarea id="notes-textarea" class="notes-textarea" placeholder="Write anything you both want to keep — a shopping list, travel plans, goals…"></textarea>
+    <p class="drawer-hint">Saved automatically for both of you.</p>
+  </div>
+</aside>
+
+<!-- ===================== EXCLUSIVE REQUEST MODAL ===================== -->
+<div class="modal-backdrop" id="exclusive-modal" hidden>
+  <div class="modal">
+    <p class="modal-title">💍 Exclusive Lock requested</p>
+    <p class="modal-body">Your partner wants to lock this connection as Exclusive.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="btn-decline-exclusive">Decline</button>
+      <button class="btn btn-primary" id="btn-accept-exclusive">Accept</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
