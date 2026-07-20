@@ -17,6 +17,11 @@ const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, "data", "db.json");
+const DB_DIR = path.dirname(DB_PATH);
+
+if (!fs.existsSync(DB_DIR)) {
+  fs.mkdirSync(DB_DIR, { recursive: true });
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
